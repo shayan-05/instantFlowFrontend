@@ -42,7 +42,7 @@ export default function Signup() {
 
 
             await axios.post(
-                `${import.meta.env.VITE_URL}/user/create-user`,
+                `${import.meta.env.VITE_URL}/api/v1/user/create-user`,
                 formData,
                 {
                     headers: {

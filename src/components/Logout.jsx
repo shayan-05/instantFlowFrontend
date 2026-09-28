@@ -14,7 +14,7 @@ export default function Logout(){
         setError("");
         setIsLoggingOut(true);
         try {
-            await axios.post(`${import.meta.env.VITE_URL}/user/logout`, {}, { withCredentials: true });
+            await axios.post(`${import.meta.env.VITE_URL}/api/v1/user/logout`, {}, { withCredentials: true });
             dispatch(logout());
             navigate("/login");
         } catch (requestError) {

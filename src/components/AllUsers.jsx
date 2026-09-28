@@ -14,7 +14,7 @@ export default function AllUsers() {
             try {
 
                 const response = await axios.get(
-                    `${import.meta.env.VITE_URL}/user/all-user`,
+                    `${import.meta.env.VITE_URL}/api/v1/user/all-user`,
                     {
                         withCredentials: true
                     }

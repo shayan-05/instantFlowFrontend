@@ -33,7 +33,7 @@ export default function Login() {
         try {
 
             const response = await axios.post(
-                `${import.meta.env.VITE_URL}/user/login`,
+                `${import.meta.env.VITE_URL}/api/v1/user/login`,
                 data,
                 {
                     withCredentials: true

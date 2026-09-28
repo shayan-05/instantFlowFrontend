@@ -1,201 +1,3 @@
- where is login
-it is showing set cookie both access and refresh also this
- cookie error is resolved now i can see cookies
-getting cookies in socket.io but not in all-user
-
-Good — that rules out the simplest Axios mistake. Your all-user code already has withCredentials: true.
-
-So now the problem is not Axios configuration. We need to find out why Chrome sends the cookie to Socket.IO but not to the Axios request.
-
-1. First, check the cookie's attributes
-
-Go to:
-
-F12 → Application → Cookies → your backend domain
-
-Select accessToken.
-
-Look at these columns:
-
-Name
-Domain
-Path
-Secure
-HttpOnly
-SameSite
-
-I specifically want to know the values for:
-
-Domain
-Path
-Secure
-SameSite
-
-For example, ideally:
-
-Domain   real-time-chat-application-1-y52e.onrender.com
-Path     /
-Secure   ✓
-SameSite None
-
-Don't send the Value column.
-
-2. Check the all-user request's URL
-
-Click:
-
-Network → all-user → Headers
-
-At the top, find:
-
-Request URL:
-
-It should be:
-
-https://real-time-chat-application-1-y52e.onrender.com/api/v1/user/all-user
-
-Make sure it isn't accidentally:
-
-https://instantflowfrontend2.onrender.com/api/v1/user/all-user
-
-or some other URL.
-
-3. Check the cookie warning/details
-
-In Chrome Network, select all-user and look around the Cookies section if available.
-
-Chrome sometimes tells you something like:
-
-This cookie was not sent because...
-
-That would directly tell us why.
-
-About current-user
-
-Don't worry about not finding it immediately.
-
-Your backend has:
-
-userRouter.route("/current-user").get(optionalJWT,getCurrentUser)
-
-So some frontend code is definitely requesting:
-
-/api/v1/user/current-user
-
-Since the browser shows that request, search your entire frontend project.
-
-In VS Code:
-
-Press Ctrl + Shift + F
-
-Search for:
-
-current-user
-
-If nothing appears, search for:
-
-getCurrentUser
-
-Then:
-
-/user/current
-
-Also check files commonly responsible for authentication:
-
-App.jsx
-AuthContext.jsx
-authContext.jsx
-ProtectedRoute.jsx
-AuthProvider.jsx
-Layout.jsx
-
-It may be inside a useEffect() rather than an obvious function named currentUser.
-
-Most important next step
-
-Since you've already confirmed:
-
-withCredentials: true
-
-don't change that code yet.
-
-Send me a screenshot of:
-
-Application → Cookies → backend domain → accessToken row
-
-with the Value hidden, but showing:
-
-Domain | Path | Secure | HttpOnly | SameSite
-
-That will let us determine why the exact same cookie is being sent to Socket.IO but not /all-user.
-
-thanks bro its working
-
-You're welcome bro! 😄🔥
-
-Glad it's working. The key issue turned out to be the cross-site cookie configuration, and we traced it through:
-
-Cookie blocked
-   ↓
-SameSite=None + Secure
-   ↓
-Cookie stored ✅
-   ↓
-Axios withCredentials
-   ↓
-/all-user authenticated ✅
-   ↓
-Socket.IO authentication ✅
-
-Nice debugging session — you now know how to diagnose CORS + cookies + JWT + Socket.IO issues in a deployed app, which is a very useful skill for backend development. 🚀
-
-write a readme file for this project in which describe whole project also add future advancement like we can add file sharing pdf and video call also add from your side
-
-Absolutely bro. I created a complete README.md for your Real-Time Chat Application, covering:
-
-Project overview
-Features
-Tech stack
-Architecture
-Project structure
-JWT authentication flow
-REST APIs
-Socket.IO events
-MongoDB + Redis usage
-Local setup
-Deployment
-Message flow
-Future advancements:
-📎 File sharing
-📄 PDF/document sharing
-🎥 Video calling with WebRTC
-🎙️ Voice calling/messages
-👥 Group chat
-🔔 Push notifications
-✍️ Typing indicators
-↩️ Edit/reply/delete messages
-🔍 Message search
-🔒 End-to-end encryption
-📱 Mobile application
-🤖 AI-powered features
-📊 Scaling and monitoring
-Development roadmap
-Project highlights
-Author/contribution sections
-Download
-
-Download README.md
-
-You can directly place this file in the root of your GitHub repository and rename/replace the existing README.md. 
-
-README.md
-Document
-
-Library
-/
-README.md
-InstantFlow — Real-Time Chat Application
-
 InstantFlow is a full-stack real-time chat application designed to provide fast, secure, and persistent communication between users. The application supports user authentication, online/offline presence, real-time messaging, message history, delivery/read status, and recent conversations.
 
 The project is built with a React frontend and a Node.js/Express backend, with Socket.IO handling real-time communication and MongoDB storing application data. Redis is used to maintain real-time online-user/session information.
@@ -250,6 +52,7 @@ Node.js + Express Backend
       +------ Redis
       |
       +------ Socket.IO
+
 🛠️ Tech Stack
 Frontend
 React
@@ -962,7 +765,6 @@ Mohd Shayan
 
 GitHub: https://github.com/shayan-05
 
-LinkedIn: www.linkedin.com/in/mohd-shayan-751794323
 
 ⭐ Contributing
 
@@ -976,4 +778,3 @@ Push the branch.
 Open a Pull Request.
 📄 License
 
-Add the license you choose for the project, such as MIT, before publishing the repository.

@@ -17,7 +17,7 @@ function App() {
     const getUser = async () => {
         try {
             const response = await axios.get(
-          `${import.meta.env.VITE_URL}/user/current-user`,
+          `${import.meta.env.VITE_URL}/api/v1/user/current-user`,
           { withCredentials: true }
             );
 
